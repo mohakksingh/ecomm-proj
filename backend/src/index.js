@@ -14,10 +14,10 @@ app.get("/",(req,res)=>{
     })
 })
 
-const authRouters=require('./routes/auth.route')
+const authRouters=require('./routes/auth.routes')
 app.use('/auth',authRouters)
 
-const userRouters=require('./routes/user.route')
+const userRouters=require('./routes/user.routes')
 app.use('/api/users',userRouters)
 
 

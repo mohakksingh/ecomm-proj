@@ -39,7 +39,7 @@ const deliverOrders=async(req,res)=>{
     }
 }
 
-const cancelledOrder=async(req,res)=>{
+const cancelledOrders=async(req,res)=>{
     const orderId=req.params.orderId
     try{
         const orders=await orderService.cancelledOrder(orderId)
@@ -64,7 +64,7 @@ module.exports={
     confirmedOrders,
     shippOrders,
     deliverOrders,
-    cancelledOrder,
+    cancelledOrders,
     deletedOrders
 }
 

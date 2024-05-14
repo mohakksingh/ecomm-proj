@@ -10,7 +10,7 @@ const createOrder=async(req,res)=>{
     }
 }
 
-const findOrder=async(req,res)=>{
+const findOrderById=async(req,res)=>{
     const user=req.user;
     try{
         let findOrder=await orderService.findOrderById(req.params.id)
@@ -32,5 +32,5 @@ const orderHistory=async(req,res)=>{
     }
 }
 
-module.exports={createOrder,findOrder,orderHistory}
+module.exports={createOrder,findOrderById,orderHistory}
 

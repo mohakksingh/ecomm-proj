@@ -1,6 +1,6 @@
 const ratingService=require('../services/rating.service')
 
-const createReview=async(req,res)=>{
+const createRating=async(req,res)=>{
     const user=req.user;
     try{
         const review=await ratingService.createRating(req.body,user)
@@ -25,4 +25,4 @@ const getAllRatings=async(req,res)=>{
     }
 }
 
-module.exports={createReview,getAllRatings}
+module.exports={createRating,getAllRatings}
