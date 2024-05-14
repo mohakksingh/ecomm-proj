@@ -1,26 +1,29 @@
 const cartService = require("./cart.service");
 const Address = require("../models/address.model");
 const Order = require("../models/order.model");
+const OrderItem = require("../models/orderItems.model");
+const orderItem = require("../models/orderItems.model");
 
 async function createOrder(user, shippAddress) {
   let address;
   if (shippAddress._id) {
-    let existAddress = await Address.findById(shippAddress._id);
+    const existAddress = await Address.findById(shippAddress._id);
     address = existAddress;
   } else {
     address = new Address(shippAddress);
-    address.user = user;
+    address.user = user._id;
     await address.save();
-
-    user.addresses.push(address);
+    user.address.push(address);
     await user.save();
   }
-  const cart = await cartService.findUserCart(user.id);
-  const orderItems = [];
+
+  const cart = await cartService.findUserCart(user._id);
+
+  const orderItems = []; 
   for (const item of cart.cartItems) {
-    const orderItems = new orderItems({
+    const orderItem =new OrderItem({
       price: item.price,
-      product: item.product,
+      product: item.product._id,
       quantity: item.quantity,
       size: item.size,
       userId: item.userId,
@@ -29,16 +32,17 @@ async function createOrder(user, shippAddress) {
     const createdOrderItem = await orderItem.save();
     orderItems.push(createdOrderItem);
   }
-  const createdOrder = new orderItems({
+
+  const createdOrder = new Order({
     user,
     orderItems,
     totalPrice: cart.totalPrice,
     totalDiscountedPrice: cart.totalDiscountedPrice,
-    discount: cart.discount,
+    discount: cart.totalDiscountedPrice,
     totalItem: cart.totalItem,
     shippAddress: address,
   });
-
+  console.log(createdOrder);
   const savedOrder = await createdOrder.save();
   return savedOrder;
 }

@@ -5,6 +5,7 @@ const createProduct=async(req,res)=>{
         const product=await productService.createProduct(req.body)
         return res.status(200).send(product)
     }catch(e){
+        console.log(e);
         return res.status(500).send({
             message:e.message
         })

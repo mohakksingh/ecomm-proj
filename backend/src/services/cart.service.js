@@ -5,6 +5,7 @@ const Product=require('../models/products.model')
 async function createCart(user){
     try{
         const cart=new Cart({user})
+
         const createdCart=await cart.save()
         return createdCart;
     }catch(e){
@@ -31,36 +32,55 @@ async function findUserCart(user){
         cart.totalPrice=totalPrice
         cart.totalItem=totalItem
         cart.totalDiscountedPrice=totalPrice-totalDiscountedPrice
-
+    
         return cart
     }catch(e){
+        console.log(e);
         throw new Error(e.message)
     }
 }
 
-async function addCartItem(userId,req){
-    try{
-        const cart=await Cart.findOne({user:userId})
-        const product=await Product.findById(req.productId)
-        const isPresent=await CartItem.findOne({cart:cart._id,product:req.productId,userId})
-        if(!isPresent){
-            const cartItem=new CartItem({
-                product:products._id,
-                cart:cart._id,
-                quantity:1,
-                userId,
-                price:product.price,
-                size:req.size,
-                discountedPrice:product.discountedPrice,
-            })
-        }
-        const createdCartItem=await cartItem.save()
-        cart.cartItems.push(createdCartItem)
-        await cart.save()
-        return "Item added to cart"
-    }catch(e){
-        throw new Error(e.message)
-    }   
-}
-
+async function addCartItem(userId, req) {
+    try {
+      let cart = await Cart.findOne({ user: userId });
+  
+      if (!cart) {
+        cart = await createCart(userId);
+      }
+  
+      const product = await Product.findById(req.productId);
+  
+      if (!product) {
+        throw new Error('Product not found');
+      }
+  
+      const isPresent = await CartItem.findOne({
+        cart: cart._id,
+        product: req.productId,
+        userId,
+      });
+  
+      if (!isPresent) {
+        const cartItem = new CartItem({
+          product: product._id,
+          cart: cart._id,
+          quantity: 1,
+          userId,
+          price: product.price,
+          size: req.size,
+          discountedPrice: product.discountedPrice,
+        });
+        const createdCartItem = await cartItem.save();
+        cart.cartItems.push(createdCartItem._id);
+        await cart.save();
+      } else {
+        isPresent.quantity += 1;
+        await isPresent.save();
+      }
+  
+      return 'Item added to cart';
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
 module.exports={createCart,findUserCart,addCartItem}

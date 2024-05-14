@@ -9,8 +9,8 @@ const authenticate=async(req,res,next)=>{
             })
         }
 
-        const userId=jwtProvider.getUserIdFromToken(token)
-        const user=userService.findUserById(userId)
+        const userId=await jwtProvider.getUserIdFromToken(token)
+        const user=await userService.findUserById(userId)
         req.user=user;
     }catch(e){
         return res.status(401).send({

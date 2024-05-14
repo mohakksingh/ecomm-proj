@@ -2,8 +2,9 @@ const Category = require("../models/category.model");
 const Product = require("../models/products.model");
 
 async function createProduct(reqData){
-    let topLevel=await Category.findOne({name:reqData.topLevelCategory})
+    let topLevel=await Category.findOne({reqData})
 
+    
     if(!topLevel){
         topLevel=new Category({name:reqData.topLevelCategory,
             level:1
@@ -13,6 +14,7 @@ async function createProduct(reqData){
         name:reqData.secondLevelCategory,
         parentCategory:topLevel._id
     })
+    
 
     if(!secondLevel){
         secondLevel=new Category({
@@ -26,7 +28,7 @@ async function createProduct(reqData){
         parentCategory:secondLevel._id
     })
 
-    if(thirdLevel){
+    if(!thirdLevel){
         thirdLevel=new Category({
             name:reqData.thirdLevelCategory,
             parentCategory:secondLevel._id,
@@ -47,7 +49,7 @@ async function createProduct(reqData){
         quantity:reqData.quantity,
         category:thirdLevel._id
     })
-
+    
     return await product.save()
 }
 
