@@ -13,11 +13,11 @@ async function createRating(req,user){
     return await rating.save()
 }
 
-async function getProductRating (productId){
+async function getAllRatings (productId){
     return await Rating.find({product:productId})
 }
 
 module.exports={
     createRating,
-    getProductRating
+    getAllRatings
 }
