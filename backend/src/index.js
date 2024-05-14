@@ -44,4 +44,7 @@ app.use('/api/reviews',reviewRouter)
 const ratingRouter=require('./routes/rating.routes')
 app.use('/api/ratings',ratingRouter)
 
+const paymentRouter=require('./routes/payment.routes')
+app.use('/api/payments',paymentRouter)
+
 module.exports=app;

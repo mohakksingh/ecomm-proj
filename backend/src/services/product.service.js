@@ -3,7 +3,6 @@ const Product = require("../models/products.model");
 
 async function createProduct(reqData){
     let topLevel=await Category.findOne({reqData})
-    console.log(reqData);
     
     if(!topLevel){
         topLevel=new Category({
