@@ -87,7 +87,7 @@ async function findOrderById(orderId) {
   const order = await Order.findById(orderId)
     .populate("user")
     .populate({ path: "orderItems", populate: { path: "product" } })
-    .populate("shippAddress");
+    .populate("shippingAddress");
 
   return order;
 }
