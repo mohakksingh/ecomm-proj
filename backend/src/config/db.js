@@ -1,6 +1,8 @@
 const mongoose=require('mongoose')
+const dotenv=require('dotenv')
+dotenv.config()
 
-const mondbUrl="mongodb+srv://singhmohak999:Xj3ne8rHFRKZSLnl@ecommproj.qsjz7ba.mongodb.net/"
+const mondbUrl=process.env.MONGODB_URL
 
 const connectDb=()=>{
     return mongoose.connect(mondbUrl)
