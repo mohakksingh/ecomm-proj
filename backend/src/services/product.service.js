@@ -3,12 +3,14 @@ const Product = require("../models/products.model");
 
 async function createProduct(reqData){
     let topLevel=await Category.findOne({reqData})
-
+    console.log(reqData);
     
     if(!topLevel){
-        topLevel=new Category({name:reqData.topLevelCategory,
+        topLevel=new Category({
+            name:reqData.topLevelCategory,
             level:1
         })
+        await topLevel.save()
     }
     let secondLevel=await Category.findOne({
         name:reqData.secondLevelCategory,
@@ -22,6 +24,7 @@ async function createProduct(reqData){
             parentCategory:topLevel._id,
             level:2
         })
+        await secondLevel.save()
     }
     let thirdLevel=await Category.findOne({
         name:reqData.thirdLevelCategory,
@@ -34,6 +37,7 @@ async function createProduct(reqData){
             parentCategory:secondLevel._id,
             level:3
         })
+        await thirdLevel.save()
     }
 
     const product= new Product({
@@ -64,7 +68,7 @@ async function updateProduct(productId,reqData){
 }
 
 async function findProductById(productId){
-    const product=await Product.findById(id).populate('category').exec()
+    const product=await Product.findById(productId).populate('category').exec()
 
     if(!product){
         throw new Error("Product not found" + id)
